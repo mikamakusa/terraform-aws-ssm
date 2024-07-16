@@ -1,10 +1,15 @@
 resource "aws_ssm_activation" "this" {
-  iam_role           = ""
-  description        = ""
-  expiration_date    = ""
-  name               = ""
-  registration_limit = 0
-  tags               = {}
+  count              = length(var.activation)
+  iam_role           = aws_iam_role.this.id
+  description        = lookup(var.activation[count.index], "description")
+  expiration_date    = lookup(var.activation[count.index], "expiration_date")
+  name               = lookup(var.activation[count.index], "name")
+  registration_limit = lookup(var.activation[count.index], "registration_limit")
+  tags               = merge(
+    var.tags,
+    lookup(var.activation[count.index], "tags"),
+    data.aws_default_tags.this.tags
+  )
 }
 
 resource "aws_ssm_association" "this" {

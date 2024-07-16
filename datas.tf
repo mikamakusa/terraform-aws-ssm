@@ -7,3 +7,5 @@ data "aws_kms_key" "this" {
   count  = var.kms_key_name ? 1 : 0
   key_id = var.kms_key_name
 }
+
+data "aws_default_tags" "this" {}
