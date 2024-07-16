@@ -3,16 +3,6 @@ variable "tags" {
   default = {}
 }
 
-variable "bucket_name" {
-  type    = string
-  default = null
-}
-
-variable "kms_key_name" {
-  type    = string
-  default = null
-}
-
 variable "activation" {
   type = list(object({
     id                 = number
@@ -59,9 +49,8 @@ variable "association" {
 
 variable "default_patch_baseline" {
   type = list(object({
-    id               = number
-    baseline_id      = number
-    operating_system = string
+    id          = number
+    baseline_id = number
   }))
   default     = []
   description = <<EOF
@@ -143,7 +132,6 @@ variable "maintenance_window_task" {
     description      = optional(string)
     name             = optional(string)
     priority         = optional(number)
-    service_role_arn = optional(string)
     targets = optional(list(object({
       key    = string
       values = list(string)
@@ -202,11 +190,10 @@ variable "parameter" {
     type            = string
     value           = string
     allowed_pattern = optional(string)
-    arn             = optional(string)
     data_type       = optional(string)
     description     = optional(string)
     insecure_value  = optional(string)
-    key_id          = optional(string)
+    key_id          = optional(number)
     tags            = optional(map(string))
     tier            = optional(string)
   }))
@@ -268,11 +255,8 @@ variable "resource_data_sync" {
     id   = number
     name = string
     s3_destination = list(object({
-      region      = string
-      bucket_name = string
-      kms_key_arn = optional(string)
-      prefix      = optional(string)
-      sync_format = optional(string)
+      bucket_id   = number
+      kms_key_id = optional(number)
     }))
   }))
   default     = []
@@ -289,6 +273,42 @@ variable "service_setting" {
   default     = []
   description = <<EOF
     EOF
+}
+
+variable "s3_bucket" {
+  type = list(object({
+    id                  = number
+    bucket              = optional(string)
+    bucket_prefix       = optional(string)
+    force_destroy       = optional(bool)
+    object_lock_enabled = optional(bool)
+    tags                = optional(map(string))
+  }))
+  default = []
+  description = <<EOF
+  EOF
+}
+
+variable "kms_key" {
+  type = list(object({
+    id                                 = number
+    bypass_policy_lockout_safety_check = optional(bool)
+    custom_key_store_id                = optional(string)
+    customer_master_key_spec           = optional(string)
+    deletion_window_in_days            = optional(number)
+    description                        = optional(string)
+    enable_key_rotation                = optional(bool)
+    is_enabled                         = optional(bool)
+    key_usage                          = optional(string)
+    multi_region                       = optional(bool)
+    policy                             = optional(string)
+    rotation_period_in_days            = optional(number)
+    tags                               = optional(map(string))
+    xks_key_id                         = optional(string)
+  }))
+  default = []
+  description = <<EOF
+  EOF
 }
 
 variable "assume_role_policy" {
