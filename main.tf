@@ -1,6 +1,6 @@
 resource "aws_ssm_activation" "this" {
   count              = length(var.activation)
-  iam_role           = aws_iam_role.this.id
+  iam_role           = var.iam_role_name ? data.aws_iam_role.this.id : element(module.iam.*.role_id, lookup(var.activation[count.index], "iam_role_id"))
   description        = lookup(var.activation[count.index], "description")
   expiration_date    = lookup(var.activation[count.index], "expiration_date")
   name               = lookup(var.activation[count.index], "name")
@@ -237,7 +237,7 @@ resource "aws_ssm_parameter" "this" {
   description     = lookup(var.parameter[count.index], "description")
   insecure_value  = lookup(var.parameter[count.index], "insecure_value")
   key_id          = try(
-    element(aws_kms_key.this.*.arn, lookup(var.parameter[count.index], "key_id"))
+    element(module.kms.*.key_arn, lookup(var.parameter[count.index], "key_id"))
   )
   tags = merge(
     var.tags,
@@ -315,16 +315,16 @@ resource "aws_ssm_resource_data_sync" "this" {
     for_each = lookup(var.resource_data_sync[count.index], "s3_destination")
     content {
       region      = try(
-        element(aws_s3_bucket.this.*.region, lookup(s3_destination.value, bucket_id))
+        element(module.s3.*.s3_bucket_region, lookup(s3_destination.value, bucket_id))
       )
       bucket_name = try(
-        element(aws_s3_bucket.this.*.bucket, lookup(s3_destination.value, bucket_id))
+        element(module.s3.*.bucket_name, lookup(s3_destination.value, bucket_id))
       )
       kms_key_arn = try(
-        element(aws_kms_key.this.*.arn, lookup(s3_destination.value, "kms_key_id"))
+        element(module.kms.*.key_arn, lookup(s3_destination.value, "kms_key_id"))
       )
       prefix      = try(
-        element(aws_s3_bucket.this.*.bucket_prefix, lookup(s3_destination.value, bucket_id))
+        element(module.s3.*.bucket_prefix, lookup(s3_destination.value, bucket_id))
       )
       sync_format = "JsonSerDe"
     }
@@ -332,6 +332,7 @@ resource "aws_ssm_resource_data_sync" "this" {
 }
 
 resource "aws_ssm_service_setting" "this" {
-  setting_id    = ""
-  setting_value = ""
+  count = length(var.service_setting)
+  setting_id    = lookup(var.service_setting[count.index], "setting_id")
+  setting_value = lookup(var.service_setting[count.index], "setting_value")
 }

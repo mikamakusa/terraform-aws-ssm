@@ -3,10 +3,15 @@ variable "tags" {
   default = {}
 }
 
+variable "iam_role_name" {
+  type = string
+  default = null
+}
+
 variable "activation" {
   type = list(object({
-    id                 = number
-    iam_role           = string
+    id                 = any
+    iam_role_id        = any
     description        = optional(string)
     expiration_date    = optional(string)
     name               = optional(string)
@@ -275,46 +280,19 @@ variable "service_setting" {
     EOF
 }
 
-variable "s3_bucket" {
-  type = list(object({
-    id                  = number
-    bucket              = optional(string)
-    bucket_prefix       = optional(string)
-    force_destroy       = optional(bool)
-    object_lock_enabled = optional(bool)
-    tags                = optional(map(string))
-  }))
-  default = []
-  description = <<EOF
-  EOF
-}
-
 variable "kms_key" {
-  type = list(object({
-    id                                 = number
-    bypass_policy_lockout_safety_check = optional(bool)
-    custom_key_store_id                = optional(string)
-    customer_master_key_spec           = optional(string)
-    deletion_window_in_days            = optional(number)
-    description                        = optional(string)
-    enable_key_rotation                = optional(bool)
-    is_enabled                         = optional(bool)
-    key_usage                          = optional(string)
-    multi_region                       = optional(bool)
-    policy                             = optional(string)
-    rotation_period_in_days            = optional(number)
-    tags                               = optional(map(string))
-    xks_key_id                         = optional(string)
-  }))
+  type = any
   default = []
   description = <<EOF
   EOF
 }
 
-variable "assume_role_policy" {
-  type = string
+variable "iam_role" {
+  type = any
+  default = []
 }
 
-variable "iam_role_name" {
-  type = string
+variable "iam_policy_attachment" {
+  type = any
+  default = []
 }
