@@ -1,3 +1,13 @@
+resource "aws_iam_role" "this" {
+  name = "ssm_role"
+  assume_role_policy = data.aws_iam_policy_document.AmazonSSMManagedInstanceCore.json
+}
+
+resource "aws_iam_role_policy_attachment" "this" {
+  policy_arn = join("/", ["arn:aws:iam::aws:policy", data.aws_iam_policy_document.AmazonSSMManagedInstanceCore.policy_id])
+  role       = aws_iam_role.this.name
+}
+
 resource "aws_ssm_activation" "this" {
   count              = length(var.activation)
   iam_role           = var.iam_role_name ? data.aws_iam_role.this.id : element(module.iam.*.role_id, lookup(var.activation[count.index], "iam_role_id"))
