@@ -6,7 +6,7 @@ module "iam" {
 
 module "s3" {
   source = "modules/terraform-aws-s3"
-  bucket = []
+  bucket = var.s3_bucket
 }
 
 module "kms" {

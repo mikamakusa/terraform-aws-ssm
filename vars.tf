@@ -296,3 +296,8 @@ variable "iam_policy_attachment" {
   type = any
   default = []
 }
+
+variable "s3_bucket" {
+  type = any
+  default = []
+}

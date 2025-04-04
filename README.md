@@ -2,14 +2,14 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.58.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.58.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.58.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.58.0 |
 
 ## Modules
 
@@ -23,7 +23,6 @@
 
 | Name | Type |
 |------|------|
-| [aws_s3_bucket.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_ssm_activation.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_activation) | resource |
 | [aws_ssm_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_association) | resource |
 | [aws_ssm_default_patch_baseline.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_default_patch_baseline) | resource |
@@ -58,6 +57,7 @@
 | <a name="input_patch_baseline"></a> [patch\_baseline](#input\_patch\_baseline) | n/a | <pre>list(object({<br/>    id                                   = number<br/>    name                                 = string<br/>    approved_patches                     = optional(list(string))<br/>    approved_patches_compliance_level    = optional(string)<br/>    approved_patches_enable_non_security = optional(bool)<br/>    description                          = optional(string)<br/>    operating_system                     = optional(string)<br/>    rejected_patches                     = optional(list(string))<br/>    rejected_patches_action              = optional(string)<br/>    tags                                 = optional(map(string))<br/>    approval_rule = optional(list(object({<br/>      approve_after_days  = optional(string)<br/>      approve_until_date  = optional(string)<br/>      compliance_level    = optional(string)<br/>      enable_non_security = optional(bool)<br/>      patch_filter = list(object({<br/>        key    = string<br/>        values = list(string)<br/>      }))<br/>    })), [])<br/>    global_filter = optional(list(object({<br/>      key    = string<br/>      values = list(string)<br/>    })), [])<br/>    source = optional(list(object({<br/>      configuration = string<br/>      name          = string<br/>      products      = list(string)<br/>    })), [])<br/>  }))</pre> | `[]` | no |
 | <a name="input_patch_group"></a> [patch\_group](#input\_patch\_group) | n/a | <pre>list(object({<br/>    id          = number<br/>    baseline_id = string<br/>    patch_group = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_resource_data_sync"></a> [resource\_data\_sync](#input\_resource\_data\_sync) | n/a | <pre>list(object({<br/>    id   = number<br/>    name = string<br/>    s3_destination = list(object({<br/>      bucket_id   = number<br/>      kms_key_id = optional(number)<br/>    }))<br/>  }))</pre> | `[]` | no |
+| <a name="input_s3_bucket"></a> [s3\_bucket](#input\_s3\_bucket) | n/a | `any` | `[]` | no |
 | <a name="input_service_setting"></a> [service\_setting](#input\_service\_setting) | n/a | <pre>list(object({<br/>    id            = number<br/>    setting_id    = string<br/>    setting_value = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | n/a | `map(string)` | `{}` | no |
 
